@@ -68,10 +68,10 @@ export class FlightModeController implements FlightModeControllerInterface {
     velocityPID = new PID(0.05, 0.01, 0.00, 100)
     angleOfAttackPID =  new  PID(3.6,0,0, 10)
     velocitySp = 20
-    hoverTarget = new PointOnSphere(degToRad(30), degToRad(10))
+    hoverTarget = new PointOnSphere(degToRad(30), degToRad(20)) // controls point plane flies to before going to flight path
     moment: Vector3
-    angle = 30
-    radius = 20
+    angle = 30// changes  angle of flight path from ground
+    radius = 20 // changes size of circle generated
     lookAhead = 0.9
 
     attitudeSPHelper = new THREE.AxesHelper( 5 )
@@ -90,11 +90,12 @@ export class FlightModeController implements FlightModeControllerInterface {
         let vtolAlgo = controllerOptions.VTOLalgo != undefined ? controllerOptions.VTOLalgo : VTOL_TransitionAlgo.default
 
         this.vtol = new VTOL(5, headingOffset, vtolAlgo)
+        // first value in PointOn Spher controls location of flight path relative to tether rotating it around the post
         this.pf = new PathFollow( new PointOnSphere(degToRad(0), degToRad(this.angle)), this.radius, 40, this.tetherLength, this.lookAhead, 0) // this.aircraft.aeroSurfaces['rudder']
 
         aircraft.add(this.momentArrow)  // visual helper on kite
         Logger.getInstance().addLoggable(this, "pf.pathError", "pf.loopProgressAngle")
-        this.attitudeSPHelper.visible = false // debug
+        this.attitudeSPHelper.visible = true // debug
     }
 
     upDownLeftRight(updown: number, leftRight: number) {}

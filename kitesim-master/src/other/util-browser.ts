@@ -75,7 +75,7 @@ export class Pause {
       var self = this
       document.addEventListener('keydown', function (e) {
           var key = e.keyCode || e.which;
-          if (key === 80) {
+          if (key === 81) {
               self.toggle()
           }
       }, false);

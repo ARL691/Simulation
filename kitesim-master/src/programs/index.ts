@@ -34,11 +34,15 @@ function init() {
 	scene.add( ...sim.getUIObjects() );
 	
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
-	renderer.setSize( window.innerWidth, window.innerHeight );
+	renderer.setSize( window.innerWidth-250, window.innerHeight-250 ); // controls size of display window in browser.
+	document.body.innerHTML
 	document.body.appendChild( renderer.domElement );
+	
+	
 
 	setupLights()
 	setupWorld()
+
 }
 
 function animate(timestamp?: number) {
@@ -56,6 +60,7 @@ function update(dt: number){
 
 	if (pause.on) return
 
+	document.getElementById('info')
 	simTime += dt
 
 	if (simTime % 1 < 1/50) { console.log(keyAxis.upDown, keyAxis.leftRight) }
@@ -63,6 +68,7 @@ function update(dt: number){
 	sim.update(dt, simTime)
 	sim.flightModeController.upDownLeftRight(keyAxis.upDown, keyAxis.leftRight)
 	sim.updateUI()
+	
 }
 
 function setupLights() {

@@ -111,11 +111,13 @@ export class PathFollow {
         return dist*dist
     }
 
+    // This section controls the generation of the black sky path trace
     getUIObjects(): THREE.Object3D[] {
         var segments = 64,
         material = new THREE.LineBasicMaterial( { color: 0x000000 } ),
+        //geometry = new THREE.Triangle
         geometry = new THREE.CircleGeometry( this.radius, segments )
-
+        // geometry = new THREE.BoxGeometry(this.radius, segments)
         // Remove center vertex
         geometry.vertices.shift()
         let line = new THREE.LineLoop( geometry, material )
