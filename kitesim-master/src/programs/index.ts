@@ -1,8 +1,10 @@
 import * as THREE from 'three'
 import { Vector3, AxesHelper } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { Pause, KeyAxis } from "../other/util-browser"
+import { Pause, KeyAxis, updateDescriptionUI} from "../other/util-browser"
 import { Simulation, defaultConfig40 } from "../other/simulation"
+import { info } from 'console'
+
 
 let camera: THREE.PerspectiveCamera, renderer: THREE.Renderer;
 let lastTimestamp: number
@@ -12,6 +14,7 @@ let simTime = 0
 
 let sim = new Simulation(defaultConfig40)
 let keyAxis = new KeyAxis(1)
+
 
 init();
 animate();
@@ -35,11 +38,11 @@ function init() {
 	
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.setSize( window.innerWidth-250, window.innerHeight-250 ); // controls size of display window in browser.
-	document.body.innerHTML
+	
+	
 	document.body.appendChild( renderer.domElement );
+	updateDescriptionUI(sim.airplane,sim,simTime)
 	
-	
-
 	setupLights()
 	setupWorld()
 
@@ -60,14 +63,20 @@ function update(dt: number){
 
 	if (pause.on) return
 
-	document.getElementById('info')
 	simTime += dt
+	updateDescriptionUI(sim.airplane,sim,simTime)
+	
+    
 
 	if (simTime % 1 < 1/50) { console.log(keyAxis.upDown, keyAxis.leftRight) }
 	keyAxis.update(dt)
 	sim.update(dt, simTime)
 	sim.flightModeController.upDownLeftRight(keyAxis.upDown, keyAxis.leftRight)
 	sim.updateUI()
+	updateDescriptionUI(sim.airplane,sim,simTime)
+	
+    
+	
 	
 }
 
@@ -84,6 +93,7 @@ function setupLights() {
     dirLight.position.multiplyScalar(50)
     scene.add(dirLight)
 }
+
 
 function setupWorld() {
 	let goundplane = new THREE.Mesh(new THREE.PlaneBufferGeometry(600, 600, 2, 2),  // consider making an inside out circle

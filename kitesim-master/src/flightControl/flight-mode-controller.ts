@@ -60,7 +60,8 @@ export function getFlightController(controllerOptions: ControllerOptions, aircra
 }
 
 export class FlightModeController implements FlightModeControllerInterface {
-    pf: PathFollow
+    
+   
     mcAttitude: MCAttitude = mcAttitude
     mcPosition: MCPosition = mcPosition
     fwAttitude: FWAttitude = new FWAttitude()
@@ -73,7 +74,7 @@ export class FlightModeController implements FlightModeControllerInterface {
     angle = 30// changes  angle of flight path from ground
     radius = 20 // changes size of circle generated
     lookAhead = 0.9
-
+    pf: PathFollow 
     attitudeSPHelper = new THREE.AxesHelper( 5 )
     momentArrow = new THREE.ArrowHelper( new Vector3(1,0,0), new Vector3(0,0,0), 1, 0xff00ff)
 
@@ -90,12 +91,12 @@ export class FlightModeController implements FlightModeControllerInterface {
         let vtolAlgo = controllerOptions.VTOLalgo != undefined ? controllerOptions.VTOLalgo : VTOL_TransitionAlgo.default
 
         this.vtol = new VTOL(5, headingOffset, vtolAlgo)
-        // first value in PointOn Spher controls location of flight path relative to tether rotating it around the post
+        // first value in PointOn Sphere controls location of flight path relative to tether rotating it around the post
         this.pf = new PathFollow( new PointOnSphere(degToRad(0), degToRad(this.angle)), this.radius, 40, this.tetherLength, this.lookAhead, 0) // this.aircraft.aeroSurfaces['rudder']
 
         aircraft.add(this.momentArrow)  // visual helper on kite
         Logger.getInstance().addLoggable(this, "pf.pathError", "pf.loopProgressAngle")
-        this.attitudeSPHelper.visible = true // debug
+        this.attitudeSPHelper.visible = false // debug
     }
 
     upDownLeftRight(updown: number, leftRight: number) {}
@@ -118,6 +119,7 @@ export class FlightModeController implements FlightModeControllerInterface {
         return [this.pf.distanceToPath(this.aircraft.position), this.pf.loopProgressAngle(this.aircraft.position)]
     }
 
+    
     getUIObjects(): THREE.Object3D[]  {
         let box = new Mesh(
             new BoxGeometry(1, 1, 1),

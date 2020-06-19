@@ -75,7 +75,7 @@ export class Pause {
       var self = this
       document.addEventListener('keydown', function (e) {
           var key = e.keyCode || e.which;
-          if (key === 81) {
+          if (key === 81) { // Fixed error that resulted in pause not functioning
               self.toggle()
           }
       }, false);
@@ -91,7 +91,7 @@ export function setUpListener(keyCode: number, action: () => void, caller: Objec
   }, false);
 }
 
-export function updateDescriptionUI(airplane: Airplane, pf: PathFollow, sim: Simulation, time: number) {
+export function updateDescriptionUI(airplane: Airplane, sim: Simulation, time: number) {
       let newDescription = ''
       newDescription += "apparent wind speed : " + sim.wind.getWind(time).clone().sub(airplane.velocity_NED).length().toFixed(1) + "<br />"
       newDescription += "velocity: " + airplane.velocity_NED.length().toFixed(1) + "<br />"
@@ -117,11 +117,11 @@ export function updateDescriptionUI(airplane: Airplane, pf: PathFollow, sim: Sim
 
       newDescription += "<br />"
       // newDescription += "rudder: " + (new Euler().setFromQuaternion(airplane.rudder.mesh.quaternion, 'XYZ').x * 180/Math.PI).toFixed(1) + "<br />"
-      newDescription += "angleError: " + pf.getAngleError().toFixed(1) + "<br />"
+      //newDescription += "angleError: " + pf.getAngleError().toFixed(1) + "<br />"
       // newDescription += "angleToPoint: " + Math.floor(angleToPoint*180/Math.PI) + "<br />"
       // newDescription += "currentHeading: " + Math.floor(currentHeading*180/Math.PI) + "<br />"
 
-      document.getElementById('info').innerHTML = newDescription
+      document.body.children.item(0).innerHTML = newDescription
 }
 
 export class PID {
