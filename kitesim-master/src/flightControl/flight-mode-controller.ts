@@ -10,6 +10,7 @@ import { mcPosition, MCPosition } from './mc-position'
 import { FWAttitude } from './fw-attitude'
 import { VTOL, VTOL_StraightUp, VTOL_TransitionAlgo } from './vtol'
 import { TetherOptions } from '../other/tether'
+import { Manual, KeyAxis } from '../other/util-browser'
 
 export enum FlightControlellerType {
     Default
@@ -60,7 +61,6 @@ export function getFlightController(controllerOptions: ControllerOptions, aircra
 }
 
 export class FlightModeController implements FlightModeControllerInterface {
-    
    
     mcAttitude: MCAttitude = mcAttitude
     mcPosition: MCPosition = mcPosition
@@ -73,7 +73,7 @@ export class FlightModeController implements FlightModeControllerInterface {
     moment: Vector3
     angle = 30// changes  angle of flight path from ground
     radius = 20 // changes size of circle generated
-    lookAhead = 0.9
+    lookAhead = 0.9 
     pf: PathFollow 
     attitudeSPHelper = new THREE.AxesHelper( 5 )
     momentArrow = new THREE.ArrowHelper( new Vector3(1,0,0), new Vector3(0,0,0), 1, 0xff00ff)
@@ -99,7 +99,10 @@ export class FlightModeController implements FlightModeControllerInterface {
         this.attitudeSPHelper.visible = false // debug
     }
 
-    upDownLeftRight(updown: number, leftRight: number) {}
+    upDownLeftRight(upDown: number, leftRight: number) {
+        let CurrentUpDown:number = upDown;
+        let CurrentLeftRight:number = leftRight;       
+    }
     setTarget(pos: Vector3) {}
 
     updateUI() {
@@ -165,13 +168,15 @@ export class FlightModeController implements FlightModeControllerInterface {
                 break;
 
             case FlightMode.PathFollow:
-                // the pathfllowing algorithm will adjust the rudder give the input. It's currently turned on by toggleing 'q'
-                var rotationRate = this.pf.updateGetRotationRate(this.aircraft.position.clone(), this.aircraft.velocity_NED.clone()) // internally mofified the rudder angle
-                var angle = this.fwAttitude.getRudderAngle(rotationRate, this.aircraft.rotationRate_FRD.x, dt)
+                // the pathfollowing algorithm will adjust the rudder give the input. It's currently planned to be turned on by toggleing 'q' but is hardcodedfor now
+                
+                var rotationRate = this.pf.updateGetRotationRate(this.aircraft.position.clone(), this.aircraft.velocity_NED.clone()) // internally modified the rudder angle
+                var angle = this.fwAttitude.getRudderAngle(rotationRate, this.aircraft.rotationRate_FRD.x, dt)  // is this the controller for the direction of plane
                 var angle = Math.max(-16, Math.min(16, angle))
-
-                this.aircraft.aeroSurfaces["rudder"].setDelta(angle / 180 * Math.PI ) // - 8
-                this.aircraft.aeroSurfaces["elevator"].setDelta( - this.angleOfAttackPID.update( this.aircraft.aeroSurfaces["left"].alfa - 8 / 180 * Math.PI , dt ))
+                
+            
+                this.aircraft.aeroSurfaces["rudder"].setDelta((angle )/ 180 * Math.PI )//.setDelta(-15 / 180 *Math.PI) // - 8
+                 this.aircraft.aeroSurfaces["elevator"].setDelta( - this.angleOfAttackPID.update( this.aircraft.aeroSurfaces["left"].alfa   / 180 * Math.PI , dt ))
                 break;
             case FlightMode.TransitionBackward:
                 this.mode = FlightMode.Position

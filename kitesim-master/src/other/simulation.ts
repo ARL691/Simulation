@@ -2,8 +2,7 @@ import * as THREE from 'three';
 import { Vector3, ArrowHelper, Quaternion } from 'three';
 import { Airplane, AirplaneOptions, KX40 } from  '../aero/airplane';
 import { Tether, TetherOptions, tetherPropertiesKX40 } from './tether';
-import { ForceMoment, Wind, WindStatic, WindTimeseries } from "./util"
-
+import { ForceMoment, Wind, WindStatic, WindTimeseries } from "./util";
 import { ControllerOptions, FlightControlellerType, getFlightController, FlightModeControllerInterface } from "../flightControl/flight-mode-controller"
 import { VTOL_TransitionAlgo } from '../flightControl/vtol';
 
@@ -93,7 +92,8 @@ export class Simulation {
             this.tether.updateStateBasedOnKitePosition(this.airplane.getAttachmentPointsState())
             this.tether.updateForcesAndPosition(dtSub, this.wind.getWind(time))
             // remove FCupdate to below
-            let moment = this.flightModeController.getMoment(dtSub) // let moment = new Vector3() //
+            let moment = this.flightModeController.getMoment(dtSub) 
+            // let moment = new Vector3() //
             
             this.airplane.update(dtSub, this.wind.getWind(time), 
                 this.airplane.getForceMomentAttachment(this.tether.kiteTetherForces_NED())
