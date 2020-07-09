@@ -36,7 +36,7 @@ export class MCPosition {
             posHeadingError -= 2* Math.PI
         }
 
-        let velSP = posHeadingPID.update(posHeadingError, dt)  // radians to m/s along ground plane // posive around Z
+        let velSP = posHeadingPID.update(posHeadingError, dt)  // radians to m/s along ground plane // positive around Z
 
         let posNE = pos.clone().setZ(0)
         let velNE = vel.clone().setZ(0)

@@ -20,7 +20,7 @@ export  interface SimConfig {
         }
     }
 }
-
+// Added timeSeries test code *may need further testing*
 
 export let defaultConfig40: SimConfig =  {
     airplane: KX40,  //SuperQuad,  //KX4, //airplaneOptionsFromJSON(airplaneJSON), // Aircraft,  //
@@ -32,9 +32,24 @@ export let defaultConfig40: SimConfig =  {
         radius: 40,
         angle: 40,
     },
+    // This function controls the static wind in the simulation ie when you expect a given wind condition to be essentially stable over a set flight you can simply set a static vector
+    // to represent it.
+    // Note that the meteorological wind direction is the direction where the wind comes while the vector points in the opposite direction 
+    // ie. a south wind is blowing means its vector heads to the north direction
+    // for a north wind the vector input should be (negative magnitude ,0,0)
+    // for a south wind the vector input should be (positive magnitude ,0,0)
+    // for a east wind the vector input should be (0, negative magnitude ,0)
+    // for a west wind the vector input should be (0, positive magnitude ,0)
 	wind:  {
-		static: new Vector3(12, 0, 0 )
-	}
+        static: new Vector3(12, 0, 0 )
+        
+        //timeSeries: {
+        // wind:[new Vector3(12,0,0)],
+        // dt: 1
+    // }
+    }
+    
+
 }
 
 
@@ -45,6 +60,7 @@ export class Simulation {
     tetherForceArrow = new ArrowHelper( new Vector3() )
     flightModeController: FlightModeControllerInterface
     wind: Wind
+    windArrow = new ArrowHelper( new Vector3()) // this was added to attempt to visualize the wind value
     
     constructor(simConfig: SimConfig) {
         this.airplane = new Airplane( simConfig.airplane )
@@ -65,6 +81,9 @@ export class Simulation {
 
         this.tetherForceArrow.position.copy(tp.origin)
         this.tetherForceArrow.visible = false
+       // Turns wind visualization on or off
+        this.windArrow.visible = false
+        this.windArrow.position.copy(tp.origin)
         
     }
 
@@ -76,7 +95,8 @@ export class Simulation {
 
         // Set the position of the boxes showing the tether.
         this.tether.updateUI()
-        this.flightModeController.updateUI()
+        this.flightModeController.updateUI() 
+       
     }
 
     update(dt: number, time: number){
@@ -94,6 +114,10 @@ export class Simulation {
             // remove FCupdate to below
             let moment = this.flightModeController.getMoment(dtSub) 
             // let moment = new Vector3() //
+
+             // This is an attempt at visualizing the wind vector.
+            this.windArrow.setDirection(this.wind.getWind(time).clone().normalize())
+            this.windArrow.setLength(this.wind.getWind.length)
             
             this.airplane.update(dtSub, this.wind.getWind(time), 
                 this.airplane.getForceMomentAttachment(this.tether.kiteTetherForces_NED())
@@ -104,6 +128,8 @@ export class Simulation {
         this.flightModeController.update(dt) // with sideeffects. 
         this.flightModeController.adjustThrust(dt)
         this.flightModeController.autoAdjustMode()
+
+
     }
 
     getUIObjects(): THREE.Object3D[] {

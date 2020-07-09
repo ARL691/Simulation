@@ -119,7 +119,14 @@ export function degToRad(deg: number): number {
 export interface Wind {
   getWind(time: number) : Vector3 
 }
-
+// This function controls the static wind ie when you expect a given wind condition to be  essentially stable over a set flight you can simply set a static vector
+// to represent it.
+// Note that the meteorological wind direction is the direction where the wind comes while the vector points in the opposite direction 
+// ie. a south wind is blowing means its vector heads to the north direction
+// for a north wind the vector input should be (negative magnitude ,0,0)
+// for a south wind the vector input should be (positive magnitude ,0,0)
+// for a east wind the vector input should be (0, negative magnitude ,0)
+// for a west wind the vector input should be (0, positive magnitude ,0)
 export class WindStatic implements Wind {
   constructor(readonly wind: Vector3) {}
   
@@ -128,9 +135,11 @@ export class WindStatic implements Wind {
   }
 }
 
+// this takes an array of wind vectors and a given time step then returns a given vector at each instance of time step as the current 
+// wind note that if you dont have enough vectors in the array you will not get the correct value of wind when the timestep occurs 
 export class WindTimeseries implements Wind {
 
-  constructor( readonly wind: Vector3[], readonly timeStep: number) {  } // Not implemented yet
+  constructor( readonly wind: Vector3[], readonly timeStep: number) {} 
 
   getWind(time: number): Vector3 { 
     return this.wind[ Math.floor(time/this.timeStep) % this.wind.length ]
