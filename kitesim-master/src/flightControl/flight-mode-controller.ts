@@ -159,7 +159,7 @@ export class FlightModeController implements FlightModeControllerInterface {
                 var angle = Math.max(-16, Math.min(16, angle))/2
 
                 this.aircraft.aeroSurfaces["rudder"].setDelta(angle / 180 * Math.PI ) // 
-                let elevatorAngle = Math.PI/2 * (1-this.vtol.getAirspeedRadio(this.aircraft.velocity_NED))
+                let elevatorAngle = (Math.PI/2 * (1-this.vtol.getAirspeedRadio(this.aircraft.velocity_NED)))
                 this.aircraft.aeroSurfaces["elevator"].setDelta( elevatorAngle ) // - 8
 
                 //visualisation
@@ -175,8 +175,8 @@ export class FlightModeController implements FlightModeControllerInterface {
                 var angle = Math.max(-16, Math.min(16, angle))
                 
             
-                this.aircraft.aeroSurfaces["rudder"].setDelta((angle )/ 180 * Math.PI )//.setDelta(-15 / 180 *Math.PI) // - 8
-                 this.aircraft.aeroSurfaces["elevator"].setDelta( - this.angleOfAttackPID.update( this.aircraft.aeroSurfaces["left"].alfa   / 180 * Math.PI , dt ))
+                this.aircraft.aeroSurfaces["rudder"].setDelta((angle)/ 180 * Math.PI )//.setDelta(-15 / 180 *Math.PI) // - 8
+                 this.aircraft.aeroSurfaces["elevator"].setDelta(  this.angleOfAttackPID.update( this.aircraft.aeroSurfaces["left"].alfa   / 180 * Math.PI , dt ))
                 break;
             case FlightMode.TransitionBackward:
                 this.mode = FlightMode.Position

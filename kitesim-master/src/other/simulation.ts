@@ -41,7 +41,7 @@ export let defaultConfig40: SimConfig =  {
     // for a east wind the vector input should be (0, negative magnitude ,0)
     // for a west wind the vector input should be (0, positive magnitude ,0)
 	wind:  {
-        static: new Vector3(12, 0, 0 )
+        static: new Vector3(12, 0, 0)
         
         //timeSeries: {
         // wind:[new Vector3(12,0,0)],
@@ -65,7 +65,7 @@ export class Simulation {
     constructor(simConfig: SimConfig) {
         this.airplane = new Airplane( simConfig.airplane )
         let tp = simConfig.tether
-        this.airplane.position.copy( tp.origin.clone().add(tp.direction.clone().multiplyScalar(tp.totalLength)) )
+        this.airplane.position.copy( tp.origin.clone().add(tp.direction.clone().multiplyScalar(tp.totalLength))) //.add(new Vector3(0,0,-.2).multiplyScalar(tp.totalLength)))//.add(new Vector3(),new Vector3(0,0,-35)))// )
         this.airplane.applyQuaternion(simConfig.airplaneOrientation)
         this.tether = new Tether(simConfig.tether, this.airplane.getAttachmentPointsState())
         this.flightModeController = getFlightController(simConfig.controller, this.airplane, tp)

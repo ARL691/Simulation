@@ -248,7 +248,7 @@ export function updateDescriptionUI(airplane: Airplane, sim: Simulation, time: n
       newDescription += "z: " + z.toFixed(2) + "<br />"
 
       newDescription += "<br />"
-      newDescription += "rudder: " + (new Euler().setFromQuaternion(airplane.aeroSurfaces["rudder"].quaternion, 'XYZ').x * 180/Math.PI).toFixed(1) + "<br />" 
+      newDescription += "rudder: " + (90 - Math.abs(( new Euler().setFromQuaternion(airplane.aeroSurfaces["rudder"].quaternion, 'XYZ').x) * 180/Math.PI)).toFixed(1) + "<br />" 
       newDescription += "elevator: " + (new Euler().setFromQuaternion(airplane.aeroSurfaces["elevator"].quaternion, 'XYZ').x * 180/Math.PI).toFixed(1) + "<br />"
       //newDescription += "angleError: " + pf.getAngleError().toFixed(1) + "<br />"
       // newDescription += "angleToPoint: " + Math.floor(pf.angleToPoint*180/Math.PI) + "<br />"

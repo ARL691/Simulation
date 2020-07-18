@@ -6,7 +6,7 @@ export enum VTOL_TransitionAlgo {
 
 export class VTOL {
     rollStart: number = 0
-    pitchStart: number = 0
+    pitchStart: number = 0//180 * Math.PI
     rollForward: number = -80/180 * Math.PI
     ratio: number = 0
     thrustStart: number = 0
