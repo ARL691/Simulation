@@ -31,13 +31,10 @@ function init() {
 	controls.target.add(new Vector3(70, 10, -30))
 	camera.position.set(-50,30,-30)
 	controls.update()
-	
-	
 	scene.add(new THREE.GridHelper(100,10).rotateX(Math.PI/2))
 	// scene.add(goundplane)
 	scene.add(new AxesHelper(10))
 	scene.add( ...sim.getUIObjects() );
-	
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.setSize( window.innerWidth, window.innerHeight ); // controls size of display window in browser.
 	
@@ -48,9 +45,7 @@ function init() {
 	setupLights()
 	setupWorld()
 	
-
 	
-
 }
 
 function animate(timestamp?: number) {

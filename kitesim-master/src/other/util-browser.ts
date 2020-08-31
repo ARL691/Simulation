@@ -3,7 +3,6 @@ import { Airplane } from '../aero/airplane'
 import { PathFollow } from '../flightControl/path-follow'
 import { Simulation } from './simulation';
 
-
 export var Key = {
   _pressed: {},
   _listeners: {},
