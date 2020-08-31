@@ -25,7 +25,10 @@ export class PathFollow {
         this.N = N
 
         for (var i = 0; i < this.N; i++) {
-            this.points.push(new Vector2(radius * Math.cos(-i / N * 2 * Math.PI), radius * Math.sin(-i / N * 2 * Math.PI)))
+            //this.points.push(new Vector2(radius * Math.cos(-i / N * 2 * Math.PI), radius * Math.sin(-i / N * 2 * Math.PI)))// this controls the creation of the hover target this setting rotates clockwise
+            // this.points.push(new Vector2(radius * Math.sin(-i / N * 2 * Math.PI), radius * Math.cos(-i / N * 2 * Math.PI))) // this formula reverses the generation of the points to rotate counter clockwise
+            this.points.push(new Vector2((radius + 1) * .5 * Math.cos(-i / N * 3 * Math.PI), radius  * 2.0 * Math.sin(-i / N * 2 * Math.PI))) // ellipse formula that results in figure 8 flight path
+            //this.points.push(new Vector2((radius*(Math.cos(-i / N * 2 * Math.PI))/(1+ Math.sin(-i / N * 2 * Math.PI)^2)),(radius*(Math.cos(-i / N * 2 * Math.PI)*Math.sin(-i / N * 2 * Math.PI))/(1+Math.sin(-i / N * 2 * Math.PI)^2))))
         }
 
         this.quaternion = tc.getQauternion()
@@ -114,12 +117,22 @@ export class PathFollow {
     // This section controls the generation of the black sky path trace
     getUIObjects(): THREE.Object3D[] {
         var segments = 64,
-        material = new THREE.LineBasicMaterial( { color: 0x000000 } ),
+        material = new THREE.LineBasicMaterial( { color: 0x000000 } )
         //geometry = new THREE.Triangle
-        geometry = new THREE.CircleGeometry( this.radius, segments )
+        // geometry = new THREE.CircleGeometry( this.radius, segments )
+        var curve = new THREE.EllipseCurve(
+            -4,  -7,            // ax, aY
+            25, 75,           // xRadius, yRadius
+            0,  2 * Math.PI,  // aStartAngle, aEndAngle
+            false,            // aClockwise
+            this.quaternion.y                 // aRotation
+        );
+        
+        var points = curve.getPoints( 100 );
+        var geometry = new THREE.BufferGeometry().setFromPoints( points )
         // geometry = new THREE.BoxGeometry(this.radius, segments)
         // Remove center vertex
-        geometry.vertices.shift()
+        // geometry.vertices.shift()
         let line = new THREE.LineLoop( geometry, material )
         line.setRotationFromQuaternion(this.quaternion)
         line.rotateY(Math.PI/2)

@@ -90,7 +90,7 @@ export class VTOL_StraightUp { // straight up
     }
 
     getThrust(): number {
-        return 1 
+        return 1
     }
 
     getAttitudeForward(attiude: Quaternion, pos: Vector3, vel: Vector3): Quaternion {

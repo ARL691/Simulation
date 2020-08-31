@@ -7,6 +7,10 @@ import { PathFollow } from '../flightControl/path-follow'
 
 
 
+
+		
+	
+
 let camera: THREE.PerspectiveCamera, renderer: THREE.Renderer;
 let lastTimestamp: number
 let scene = new THREE.Scene()
@@ -37,10 +41,13 @@ function init() {
 	scene.add( ...sim.getUIObjects() );
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.setSize( window.innerWidth, window.innerHeight ); // controls size of display window in browser.
-	
-	
-	document.body.appendChild( renderer.domElement );
+	renderer.domElement.id = "simCanvas";
+	document.getElementById("simContainer").appendChild( renderer.domElement);
+
+
+
 	updateDescriptionUI(sim.airplane,sim,simTime)
+	// updateCharts(Chart,sim.airplane,sim,simTime)
 	
 	setupLights()
 	setupWorld()
@@ -76,7 +83,7 @@ function update(dt: number){
 	sim.flightModeController.upDownLeftRight(keyAxis.upDown, keyAxis.leftRight);
 	sim.updateUI()
 	updateDescriptionUI(sim.airplane,sim,simTime)	
-
+	
 	if (manual.on) return
 	manual.update()
 

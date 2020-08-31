@@ -8,7 +8,7 @@
         "lib": ["dom", "es6", "es2017"]
     },
     "include": [
-        "src/*.ts", "src/*/*.ts"
+        "src/*.ts", "src/*/*.ts", "src/programs/charts.js"
     ],
     "exclude": [
         "node_modules",

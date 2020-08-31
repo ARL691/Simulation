@@ -32,10 +32,10 @@ export let tetherPropertiesKX40: TetherOptions = {
   diameter: 0.01,
 	youngsModolus: 80e8, // 67% of SK75  fiber  // FIXME
   k0_negative: 0, // spring konstant // N per e,
-  d0: 30, // damping,
+  d0: 20, // damping,
   cd: 0.95,
   origin: new Vector3(0,0,-10),
-  direction: new Vector3(1,0,0)
+  direction: new Vector3(1,0,-.01)
 }
 
 export class Tether {

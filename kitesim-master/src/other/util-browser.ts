@@ -3,6 +3,8 @@ import { Airplane } from '../aero/airplane'
 import { PathFollow } from '../flightControl/path-follow'
 import { Simulation } from './simulation';
 
+export var ApparentWindSpeed ={};
+
 export var Key = {
   _pressed: {},
   _listeners: {},
@@ -82,8 +84,8 @@ export class Manual {
     if (Key.isDown(Key.DOWN)) { this.elevatorUpDown -= this.increment; console.log("elevator down called")}
     if (Key.isDown(Key.LEFT)) { this.rudderLeftRight -= this.increment; console.log("ruddder left called")}
     if (Key.isDown(Key.RIGHT)) { this.rudderLeftRight += this.increment ; console.log("rudder right called")}
-    console.log("rudder value: "+this.rudderLeftRight)
-    console.log("elevator value: "+this.elevatorUpDown)
+    // console.log("rudder value: "+this.rudderLeftRight)
+    // console.log("elevator value: "+this.elevatorUpDown)
   }
   
   toggle() {
@@ -222,14 +224,57 @@ export function setUpListener(keyCode: number, action: () => void, caller: Objec
   }, false);
 }
 
+
+
+
+export function addData(chart:Chart, label:string, data:any) {
+  chart.data.labels.push(label);
+  chart.data.datasets.forEach((dataset) => {
+      dataset.data.push(data);
+  });
+  chart.update();
+}
+
+export function removeData(chart:Chart) {
+  chart.data.labels.pop();
+  chart.data.datasets.forEach((dataset) => {
+      dataset.data.pop();
+  });
+  chart.update();
+}
+
+
 export function updateDescriptionUI(airplane: Airplane, sim: Simulation, time: number) {
       let newDescription = ''
       newDescription += "apparent wind speed : " + sim.wind.getWind(time).clone().sub(airplane.velocity_NED).length().toFixed(1) + "<br />"
+     
+      ApparentWindSpeed = sim.wind.getWind(time).clone().sub(airplane.velocity_NED).length().toFixed(1) 
+      
+      window.localStorage.setItem('dps1',JSON.stringify(ApparentWindSpeed))
+
       newDescription += "velocity: " + airplane.velocity_NED.length().toFixed(1) + "<br />"
 
+      var velocity=airplane.velocity_NED.length().toFixed(2)
+
+      window.localStorage.setItem('dps2',JSON.stringify(velocity))
+
       newDescription += "alfa left wing: " + (airplane.aeroSurfaces["left"].alfa * 180 / Math.PI).toFixed(1) + "<br />"
+
+      var alfaWing=(airplane.aeroSurfaces["left"].alfa * 180 / Math.PI).toFixed(2)
+
+      window.localStorage.setItem('dps3',JSON.stringify(alfaWing))
+
       newDescription += "alfa verticalL wing : " + (airplane.aeroSurfaces["verticalL"].alfa * 180 / Math.PI).toFixed(1) + "<br />"
-      newDescription += "thrust: " + airplane.thrust.toFixed(1) + "<br />"
+
+      var alfaVert=(airplane.aeroSurfaces["verticalL"].alfa * 180 / Math.PI).toFixed(2)
+
+      window.localStorage.setItem('dps4',JSON.stringify(alfaVert))
+
+      newDescription += "thrust: " + airplane.thrust.toFixed(2) + "<br />"
+
+      var thrust= airplane.thrust.toFixed(2)
+
+      window.localStorage.setItem('dps5',JSON.stringify(thrust))
 
       var euler = new Euler(0,0,0, 'ZYX')
       euler.setFromQuaternion(airplane.quaternion, 'ZYX')
@@ -248,6 +293,11 @@ export function updateDescriptionUI(airplane: Airplane, sim: Simulation, time: n
 
       newDescription += "<br />"
       newDescription += "rudder: " + (90 - Math.abs(( new Euler().setFromQuaternion(airplane.aeroSurfaces["rudder"].quaternion, 'XYZ').x) * 180/Math.PI)).toFixed(1) + "<br />" 
+    
+      var rudder = (90 - Math.abs(( new Euler().setFromQuaternion(airplane.aeroSurfaces["rudder"].quaternion, 'XYZ').x) * 180/Math.PI)).toFixed(2)
+      
+      window.localStorage.setItem('dps6',JSON.stringify(rudder))
+    
       newDescription += "elevator: " + (new Euler().setFromQuaternion(airplane.aeroSurfaces["elevator"].quaternion, 'XYZ').x * 180/Math.PI).toFixed(1) + "<br />"
       //newDescription += "angleError: " + pf.getAngleError().toFixed(1) + "<br />"
       // newDescription += "angleToPoint: " + Math.floor(pf.angleToPoint*180/Math.PI) + "<br />"

@@ -13,6 +13,7 @@
   "author": "Andreas Okholm",
   "license": "ISC",
   "devDependencies": {
+    "@types/chart.js": "^2.9.23",
     "@types/jest": "^24.0.16",
     "@types/node": "^12.6.8",
     "jest": "^24.8.0",
@@ -24,6 +25,8 @@
     "webpack-cli": "^3.3.6"
   },
   "dependencies": {
-    "csv-parse": "^4.6.5"
+    "chart.js": "^2.9.3",
+    "csv-parse": "^4.6.5",
+    "fs": "0.0.1-security"
   }
 }
